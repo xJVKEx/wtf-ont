@@ -310,21 +310,41 @@
     </div>
 
     <script>
-        const manifestUrl = 'https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/manifest.json';
+        // Try CDN first, fallback to local manifest.json for testing
+        const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const manifestUrl = isLocal ? './manifest.json' : 'https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/manifest.json';
+        
         let fonts = [];
         let currentFilter = 'all';
         let loadedFontStyles = new Set();
         let activeFont = null;
 
+        console.log('Loading manifest from:', manifestUrl);
         fetch(manifestUrl)
-            .then(r => r.json())
+            .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+                return r.json();
+            })
             .then(data => {
+                console.log('Loaded fonts:', data);
                 fonts = data;
                 renderList(fonts);
                 if (fonts.length > 0) applyFont(fonts[0]);
             })
-            .catch(() => {
-                document.getElementById('font-list').innerHTML = '<div style="color:#f55;padding:20px;">Failed to load fonts.</div>';
+            .catch(err => {
+                console.error('Font loading error:', err);
+                document.getElementById('font-list').innerHTML = `
+                    <div style="color:#f55;padding:20px;font-size:12px;">
+                        <strong>Failed to load fonts</strong><br><br>
+                        Error: ${err.message}<br><br>
+                        <span style="color:#888;">
+                        If testing locally (file://), you need to:<br>
+                        1. Use a local server (Live Server extension)<br>
+                        2. Or host on GitHub Pages<br>
+                        3. Or wait for CDN cache to clear (5-10 min)
+                        </span>
+                    </div>
+                `;
             });
 
         function renderList(list) {
@@ -348,7 +368,11 @@
         function applyFont(font) {
             if (!loadedFontStyles.has(font.cssName)) {
                 const style = document.createElement('style');
-                style.innerHTML = `@font-face { font-family: '${font.cssName}'; src: url('${font.previewUrl}'); font-display: swap; }`;
+                // Use local paths when testing locally
+                const fontUrl = isLocal 
+                    ? `fonts/${font.language}/${font.cssName}/${font.cssName}-regular.ttf`
+                    : font.previewUrl;
+                style.innerHTML = `@font-face { font-family: '${font.cssName}'; src: url('${fontUrl}'); font-display: swap; }`;
                 document.head.appendChild(style);
                 loadedFontStyles.add(font.cssName);
             }
@@ -379,21 +403,32 @@
             const note = document.getElementById('personal-note');
             const fileList = document.getElementById('file-list');
 
-            if (font.downloadUrl && font.downloadUrl.endsWith('.zip')) {
-                btn.href = font.downloadUrl;
+            // Build local or CDN download URL
+            const zipFilename = font.cssName + '.zip';
+            const localZipUrl = `fonts/${font.language}/${font.cssName}/${zipFilename}`;
+            const cdnZipUrl = font.downloadUrl;
+            const downloadUrl = isLocal ? localZipUrl : cdnZipUrl;
+            
+            if (downloadUrl && downloadUrl.endsWith('.zip')) {
+                btn.href = downloadUrl;
                 btn.textContent = 'Download ZIP';
                 btn.className = 'btn';
                 btn.removeAttribute('target');
-                btn.setAttribute('download', '');
+                btn.setAttribute('download', zipFilename);
                 
                 // Show file list
                 const files = font.files || [];
                 fileList.innerHTML = files.map(f => `<li>${f}</li>`).join('');
                 fileList.style.display = 'block';
                 
-                note.innerHTML = `Includes ${files.length} files • <a href="${font.folderUrl}" target="_blank" style="color:#0af">View on GitHub ↗</a>`;
-            } else if (font.downloadUrl) {
-                btn.href = font.downloadUrl;
+                const folderLink = isLocal 
+                    ? localZipUrl 
+                    : `<a href="${font.folderUrl}" target="_blank" style="color:#0af">View on GitHub ↗</a>`;
+                note.innerHTML = isLocal 
+                    ? `Includes ${files.length} files` 
+                    : `Includes ${files.length} files • ${folderLink}`;
+            } else if (downloadUrl) {
+                btn.href = downloadUrl;
                 btn.textContent = 'Download Font';
                 btn.className = 'btn';
                 btn.removeAttribute('target');
