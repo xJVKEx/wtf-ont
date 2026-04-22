@@ -302,6 +302,7 @@
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
                     <a id="download-btn" href="#" class="btn" target="_blank">Download Font</a>
+                    <ul id="file-list" style="display:none; font-size:11px; color:#555; list-style:none; padding:0; margin:0; text-align:center;"></ul>
                     <span class="personal-note" id="personal-note"></span>
                 </div>
             </div>
@@ -373,16 +374,31 @@
             authorLink.href = font.authorUrl;
             authorLink.textContent = `by ${font.author} ↗`;
 
-            // Download button
+            // Download button & file list
             const btn = document.getElementById('download-btn');
             const note = document.getElementById('personal-note');
+            const fileList = document.getElementById('file-list');
 
-            if (font.downloadUrl) {
+            if (font.downloadUrl && font.downloadUrl.endsWith('.zip')) {
+                btn.href = font.downloadUrl;
+                btn.textContent = 'Download ZIP';
+                btn.className = 'btn';
+                btn.removeAttribute('target');
+                btn.setAttribute('download', '');
+                
+                // Show file list
+                const files = font.files || [];
+                fileList.innerHTML = files.map(f => `<li>${f}</li>`).join('');
+                fileList.style.display = 'block';
+                
+                note.innerHTML = `Includes ${files.length} files • <a href="${font.folderUrl}" target="_blank" style="color:#0af">View on GitHub ↗</a>`;
+            } else if (font.downloadUrl) {
                 btn.href = font.downloadUrl;
                 btn.textContent = 'Download Font';
                 btn.className = 'btn';
                 btn.removeAttribute('target');
                 btn.setAttribute('download', '');
+                fileList.style.display = 'none';
                 note.textContent = '';
             } else {
                 btn.href = font.sourceUrl;
@@ -390,6 +406,7 @@
                 btn.className = 'btn external';
                 btn.setAttribute('target', '_blank');
                 btn.removeAttribute('download');
+                fileList.style.display = 'none';
                 note.textContent = 'Personal use only — no redistribution rights';
             }
 
