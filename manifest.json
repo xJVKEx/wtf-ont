@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Dirty Enough",
+    "cssName": "dirty-enough",
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/en/dirty-enough/dirty-enough-regular.ttf"
+  },
+  {
+    "name": "RD Konmek",
+    "cssName": "rd-konmek",
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/rd-konmek/rd-konmek-regular.ttf"
+  },
+  {
+    "name": "SOV Prisna",
+    "cssName": "sov-prisna",
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/sov-prisna/sov-prisna-regular.ttf"
+  },
+  {
+    "name": "Torsilp Khitthueng Samoe",
+    "cssName": "torsilp-khitthueng",
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/torsilp-khitthueng-samoe/torsilp-regular.ttf"
+  }
+]
