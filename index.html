@@ -7,152 +7,232 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0a0a0a; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        
+
         #wtf-app { display: flex; height: 100vh; background: #050505; border: 1px solid #222; overflow: hidden; }
-        
-        #sidebar { 
-            width: 320px; 
-            border-right: 1px solid #222; 
-            padding: 24px; 
+
+        #sidebar {
+            width: 320px;
+            border-right: 1px solid #222;
+            padding: 24px;
             overflow-y: auto;
             background: #080808;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
-        
-        #sidebar h2 { 
-            font-size: 14px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: #666; 
+
+        #sidebar h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #666;
             margin-bottom: 20px;
             font-weight: 600;
         }
-        
-        #search { 
-            width: 100%; 
-            background: #111; 
-            color: #fff; 
-            border: 1px solid #333; 
-            padding: 12px 16px; 
-            margin-bottom: 16px;
+
+        #search {
+            width: 100%;
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 12px 16px;
+            margin-bottom: 12px;
             border-radius: 6px;
             font-size: 14px;
             outline: none;
             transition: border-color 0.2s;
         }
-        
+
         #search:focus { border-color: #0af; }
-        
         #search::placeholder { color: #555; }
-        
-        .filter-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-        
-        .filter-tab { 
-            padding: 8px 16px; 
-            background: #111; 
+
+        .filter-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+
+        .filter-tab {
+            padding: 6px 12px;
+            background: #111;
             border: 1px solid #333;
             color: #888;
             cursor: pointer;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.2s;
         }
-        
+
         .filter-tab:hover { background: #1a1a1a; color: #fff; }
         .filter-tab.active { background: #0af; color: #000; border-color: #0af; }
-        
-        .font-item { 
-            padding: 14px 12px; 
-            cursor: pointer; 
-            border-bottom: 1px solid #111; 
+        .filter-tab.active.personal { background: #fa0; border-color: #fa0; color: #000; }
+
+        #font-list { margin-top: 8px; }
+
+        .font-item {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #111;
             transition: all 0.2s;
             border-radius: 6px;
             margin-bottom: 4px;
         }
-        
-        .font-item:hover { 
-            background: #111; 
-            color: #0af;
-            transform: translateX(4px);
+
+        .font-item:hover { background: #111; }
+        .font-item.active { background: #111; border: 1px solid #0af2; }
+
+        .font-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+        .font-name { font-size: 14px; font-weight: 500; }
+
+        .license-badge {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-weight: 700;
+            flex-shrink: 0;
         }
-        
-        .font-item .font-name { font-size: 14px; font-weight: 500; }
-        .font-item .font-meta { font-size: 11px; color: #555; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        #preview-stage { 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 60px; 
+
+        .license-badge.free { background: #0af2; color: #0af; border: 1px solid #0af4; }
+        .license-badge.personal { background: #fa02; color: #fa0; border: 1px solid #fa04; }
+
+        .font-meta { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+        .font-desc-preview { font-size: 11px; color: #444; margin-top: 4px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        #preview-stage {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
             text-align: center;
             position: relative;
         }
-        
+
         #preview-stage::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
                 linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 50px 50px;
             pointer-events: none;
         }
-        
-        #editable-preview { 
-            font-size: 80px; 
-            width: 100%; 
+
+        .current-font-info {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            text-align: left;
+        }
+
+        .current-font-info .label {
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .current-font-info .name {
+            font-size: 22px;
+            color: #0af;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .font-info-meta {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .info-badge {
+            display: inline-block;
+            padding: 3px 9px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        .info-badge.lang { color: #0af; border-color: #0af3; }
+        .info-badge.free { color: #0af; border-color: #0af3; }
+        .info-badge.personal { color: #fa0; border-color: #fa03; }
+
+        .font-description {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            text-align: right;
+            max-width: 280px;
+        }
+
+        .font-description p {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .font-description a {
+            font-size: 11px;
+            color: #0af;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .font-description a:hover { opacity: 1; }
+
+        #editable-preview {
+            font-size: 80px;
+            width: 100%;
             max-width: 900px;
-            border: none; 
-            background: transparent; 
-            color: white; 
-            text-align: center; 
-            outline: none; 
-            transition: 0.3s;
+            border: none;
+            background: transparent;
+            color: white;
+            text-align: center;
+            outline: none;
+            transition: font-family 0.3s;
             resize: none;
             min-height: 200px;
             line-height: 1.2;
         }
-        
+
         #editable-preview::placeholder { color: #333; }
-        
-        .controls { 
-            margin-top: 60px; 
-            display: flex; 
-            gap: 20px; 
+
+        .controls {
+            margin-top: 60px;
+            display: flex;
+            gap: 20px;
             align-items: center;
             background: #0a0a0a;
             padding: 20px 30px;
             border-radius: 12px;
             border: 1px solid #222;
         }
-        
+
         .control-group { display: flex; flex-direction: column; gap: 8px; }
         .control-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
-        
-        #size-slider { 
-            width: 150px;
-            accent-color: #0af;
-        }
-        
-        #size-value {
-            font-size: 14px;
-            color: #0af;
-            min-width: 50px;
-        }
-        
-        .btn { 
-            padding: 14px 28px; 
-            background: #fff; 
-            color: #000; 
-            text-decoration: none; 
-            border-radius: 6px; 
+
+        #size-slider { width: 150px; accent-color: #0af; }
+
+        #size-value { font-size: 14px; color: #0af; min-width: 50px; }
+
+        .btn {
+            padding: 14px 28px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 6px;
             font-weight: 700;
             font-size: 13px;
             text-transform: uppercase;
@@ -160,45 +240,24 @@
             cursor: pointer;
             transition: all 0.2s;
             border: none;
-        }
-        
-        .btn:hover { 
-            background: #0af; 
-            transform: translateY(-2px);
-        }
-        
-        .current-font-info {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            text-align: left;
-        }
-        
-        .current-font-info .label {
-            font-size: 11px;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-        
-        .current-font-info .name {
-            font-size: 24px;
-            color: #0af;
-            font-weight: 600;
-        }
-        
-        .language-badge {
             display: inline-block;
-            padding: 4px 10px;
+        }
+
+        .btn:hover { background: #0af; transform: translateY(-2px); }
+
+        .btn.external {
             background: #111;
-            border: 1px solid #333;
-            border-radius: 4px;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888;
-            margin-left: 12px;
+            color: #fa0;
+            border: 1px solid #fa04;
+        }
+
+        .btn.external:hover { background: #fa0; color: #000; border-color: #fa0; }
+
+        .personal-note {
+            font-size: 11px;
+            color: #666;
+            margin-top: 8px;
+            text-align: center;
         }
     </style>
 </head>
@@ -207,19 +266,32 @@
         <div id="sidebar">
             <h2>Font Library</h2>
             <input type="text" id="search" placeholder="Filter fonts...">
-            <div class="filter-tabs">
+            <div class="filter-row">
                 <div class="filter-tab active" data-filter="all">All</div>
                 <div class="filter-tab" data-filter="en">EN</div>
                 <div class="filter-tab" data-filter="th">TH</div>
             </div>
+            <div class="filter-row">
+                <div class="filter-tab" data-filter="free">Free</div>
+                <div class="filter-tab personal" data-filter="personal">Personal</div>
+            </div>
             <div id="font-list">Loading fonts...</div>
         </div>
+
         <div id="preview-stage">
             <div class="current-font-info">
                 <div class="label">Currently Previewing</div>
-                <div class="name" id="current-font-name">-<span class="language-badge" id="current-lang">-</span></div>
+                <div class="name" id="current-font-name">—</div>
+                <div class="font-info-meta" id="current-font-meta"></div>
             </div>
+
+            <div class="font-description" id="font-description-panel">
+                <p id="current-desc"></p>
+                <a id="current-author-link" href="#" target="_blank"></a>
+            </div>
+
             <textarea id="editable-preview" spellcheck="false" placeholder="Type here to preview..."></textarea>
+
             <div class="controls">
                 <div class="control-group">
                     <span class="control-label">Font Size</span>
@@ -228,7 +300,10 @@
                         <span id="size-value">80px</span>
                     </div>
                 </div>
-                <a id="download-btn" href="#" class="btn" target="_blank">Download Font</a>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <a id="download-btn" href="#" class="btn" target="_blank">Download Font</a>
+                    <span class="personal-note" id="personal-note"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -238,65 +313,92 @@
         let fonts = [];
         let currentFilter = 'all';
         let loadedFontStyles = new Set();
+        let activeFont = null;
 
         fetch(manifestUrl)
             .then(r => r.json())
             .then(data => {
-                fonts = data.map(f => {
-                    // Detect language from path
-                    f.language = f.downloadUrl.includes('/th/') ? 'th' : 'en';
-                    return f;
-                });
+                fonts = data;
                 renderList(fonts);
-                if (fonts.length > 0) {
-                    applyFont(fonts[0]);
-                }
+                if (fonts.length > 0) applyFont(fonts[0]);
             })
-            .catch(err => {
-                document.getElementById('font-list').innerHTML = '<div style="color: #f55; padding: 20px;">Failed to load fonts. Check your manifest URL.</div>';
-                console.error(err);
+            .catch(() => {
+                document.getElementById('font-list').innerHTML = '<div style="color:#f55;padding:20px;">Failed to load fonts.</div>';
             });
 
         function renderList(list) {
             const container = document.getElementById('font-list');
             if (list.length === 0) {
-                container.innerHTML = '<div style="color: #666; padding: 20px; text-align: center;">No fonts found</div>';
+                container.innerHTML = '<div style="color:#666;padding:20px;text-align:center;">No fonts found</div>';
                 return;
             }
             container.innerHTML = list.map(f => `
-                <div class="font-item" onclick='applyFont(${JSON.stringify(f).replace(/'/g, "&#39;")})'>
-                    <div class="font-name">${f.name}</div>
-                    <div class="font-meta">${f.language.toUpperCase()} • ${f.cssName}</div>
+                <div class="font-item" id="item-${f.cssName}" onclick='applyFont(${JSON.stringify(f).replace(/'/g, "&#39;")})'>
+                    <div class="font-item-top">
+                        <div class="font-name">${f.name}</div>
+                        <span class="license-badge ${f.license}">${f.license === 'free' ? 'Free' : 'Personal'}</span>
+                    </div>
+                    <div class="font-meta">${f.language.toUpperCase()}</div>
+                    <div class="font-desc-preview">${f.description}</div>
                 </div>
             `).join('');
         }
 
         function applyFont(font) {
-            // Load font dynamically
             if (!loadedFontStyles.has(font.cssName)) {
                 const style = document.createElement('style');
-                style.innerHTML = `@font-face { 
-                    font-family: '${font.cssName}'; 
-                    src: url('${font.downloadUrl}'); 
-                    font-display: swap;
-                }`;
+                style.innerHTML = `@font-face { font-family: '${font.cssName}'; src: url('${font.previewUrl}'); font-display: swap; }`;
                 document.head.appendChild(style);
                 loadedFontStyles.add(font.cssName);
             }
-            
-            // Apply to preview
+
             const preview = document.getElementById('editable-preview');
-            preview.style.fontFamily = font.cssName;
+            preview.style.fontFamily = `'${font.cssName}', sans-serif`;
             preview.placeholder = `Type here to preview ${font.name}...`;
-            
-            // Update UI
-            document.getElementById('current-font-name').innerHTML = `${font.name}<span class="language-badge">${font.language.toUpperCase()}</span>`;
-            document.getElementById('download-btn').href = font.downloadUrl;
-            
-            // Default sample text based on language
-            if (!preview.value) {
-                preview.value = font.language === 'th' ? 'กขฃคฅฆง' : 'The quick brown fox';
+
+            preview.value = font.language === 'th' ? '— ยินดีต้อนรับสู่ xJVKEx —' : '— Welcome to xJVKEx —';
+
+            // Header info
+            document.getElementById('current-font-name').textContent = font.name;
+
+            const metaEl = document.getElementById('current-font-meta');
+            metaEl.innerHTML = `
+                <span class="info-badge lang">${font.language.toUpperCase()}</span>
+                <span class="info-badge ${font.license}">${font.license === 'free' ? 'Free / Commercial' : 'Personal Use Only'}</span>
+            `;
+
+            // Description + author link
+            document.getElementById('current-desc').textContent = font.description;
+            const authorLink = document.getElementById('current-author-link');
+            authorLink.href = font.authorUrl;
+            authorLink.textContent = `by ${font.author} ↗`;
+
+            // Download button
+            const btn = document.getElementById('download-btn');
+            const note = document.getElementById('personal-note');
+
+            if (font.downloadUrl) {
+                btn.href = font.downloadUrl;
+                btn.textContent = 'Download Font';
+                btn.className = 'btn';
+                btn.removeAttribute('target');
+                btn.setAttribute('download', '');
+                note.textContent = '';
+            } else {
+                btn.href = font.sourceUrl;
+                btn.textContent = 'Get on Author\'s Site ↗';
+                btn.className = 'btn external';
+                btn.setAttribute('target', '_blank');
+                btn.removeAttribute('download');
+                note.textContent = 'Personal use only — no redistribution rights';
             }
+
+            // Active state in sidebar
+            document.querySelectorAll('.font-item').forEach(el => el.classList.remove('active'));
+            const activeEl = document.getElementById(`item-${font.cssName}`);
+            if (activeEl) activeEl.classList.add('active');
+
+            activeFont = font;
         }
 
         function changeSize(val) {
@@ -304,12 +406,8 @@
             document.getElementById('size-value').textContent = val + 'px';
         }
 
-        // Search functionality
-        document.getElementById('search').oninput = (e) => {
-            filterFonts(e.target.value, currentFilter);
-        };
+        document.getElementById('search').oninput = (e) => filterFonts(e.target.value, currentFilter);
 
-        // Filter tabs
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.onclick = () => {
                 document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -319,17 +417,24 @@
             };
         });
 
-        function filterFonts(searchTerm, langFilter) {
+        function filterFonts(searchTerm, filter) {
             let filtered = fonts.filter(f => {
                 const matchesSearch = f.name.toLowerCase().includes(searchTerm.toLowerCase());
-                const matchesLang = langFilter === 'all' || f.language === langFilter;
-                return matchesSearch && matchesLang;
+                const matchesFilter =
+                    filter === 'all' ||
+                    filter === f.language ||
+                    filter === f.license;
+                return matchesSearch && matchesFilter;
             });
             renderList(filtered);
+            if (activeFont) {
+                const activeEl = document.getElementById(`item-${activeFont.cssName}`);
+                if (activeEl) activeEl.classList.add('active');
+            }
         }
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
+            if (document.activeElement === document.getElementById('editable-preview')) return;
             if (e.key === '+' || e.key === '=') {
                 const slider = document.getElementById('size-slider');
                 slider.value = Math.min(200, parseInt(slider.value) + 5);

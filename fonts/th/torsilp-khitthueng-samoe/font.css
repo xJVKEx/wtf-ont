@@ -1,0 +1,18 @@
+/*
+ * -----------------------------------------------
+ *  Font    : Torsilp Khitthueng Samoe (ทอศิลป์ คิดถึงเสมอ)
+ *  Author  : Rajun / Torsilp Art School
+ *  Profile : https://www.f0nt.com/by/rajun/
+ *  Source  : https://www.f0nt.com/release/torsilp-khitthueng-samoe/
+ *  License : Free for personal and commercial use
+ *  Packed  : xJVKEx — xjvkex.lol
+ * -----------------------------------------------
+ */
+
+@font-face {
+  font-family: 'torsilp-khitthueng';
+  src: url('torsilp-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

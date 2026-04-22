@@ -1,0 +1,18 @@
+/*
+ * -----------------------------------------------
+ *  Font    : SOV Prisna (ปริศนา)
+ *  Author  : uvSOV (Worawut Thanawatanawanich)
+ *  Profile : https://www.facebook.com/worawut.thanawatanawanich
+ *  Source  : https://www.f0nt.com/release/sov-prisna/
+ *  License : Free for commercial use
+ *  Packed  : xJVKEx — xjvkex.lol
+ * -----------------------------------------------
+ */
+
+@font-face {
+  font-family: 'sov-prisna';
+  src: url('sov-prisna-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

@@ -2,21 +2,49 @@
   {
     "name": "Dirty Enough",
     "cssName": "dirty-enough",
+    "language": "en",
+    "license": "free",
+    "description": "A rough hand-lettered display font with raw, expressive energy. Great for titles, posters, and anything that needs attitude.",
+    "author": "zlxvx",
+    "authorUrl": "https://www.1001fonts.com/users/zlx/",
+    "sourceUrl": "https://www.1001fonts.com/dirty-enough-font.html",
+    "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/en/dirty-enough/dirty-enough-regular.ttf",
     "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/en/dirty-enough/dirty-enough-regular.ttf"
   },
   {
     "name": "RD Konmek",
     "cssName": "rd-konmek",
-    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/rd-konmek/rd-konmek-regular.ttf"
+    "language": "th",
+    "license": "personal",
+    "description": "A clean, modern Thai display font with a contemporary geometric feel. Personal use only — download from the author's site.",
+    "author": "rdstudioax",
+    "authorUrl": "https://www.f0nt.com/by/rdstudioax/",
+    "sourceUrl": "https://www.f0nt.com/release/rdkonmek/",
+    "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/rd-konmek/rd-konmek-regular.ttf",
+    "downloadUrl": null
   },
   {
     "name": "SOV Prisna",
     "cssName": "sov-prisna",
+    "language": "th",
+    "license": "free",
+    "description": "A Thai calligraphic display font inspired by handwriting styles from 1977. Elegant and retro — ideal for logos, magazines, and wedding designs.",
+    "author": "uvSOV (Worawut Thanawatanawanich)",
+    "authorUrl": "https://www.facebook.com/worawut.thanawatanawanich",
+    "sourceUrl": "https://www.f0nt.com/release/sov-prisna/",
+    "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/sov-prisna/sov-prisna-regular.ttf",
     "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/sov-prisna/sov-prisna-regular.ttf"
   },
   {
     "name": "Torsilp Khitthueng Samoe",
     "cssName": "torsilp-khitthueng",
+    "language": "th",
+    "license": "free",
+    "description": "A lightweight italic Thai handwriting font with generous spacing. Perfect for casual quotes, short messages, and inspirational posts.",
+    "author": "Rajun / Torsilp Art School",
+    "authorUrl": "https://www.f0nt.com/by/rajun/",
+    "sourceUrl": "https://www.f0nt.com/release/torsilp-khitthueng-samoe/",
+    "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/torsilp-khitthueng-samoe/torsilp-regular.ttf",
     "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/torsilp-khitthueng-samoe/torsilp-regular.ttf"
   }
 ]
