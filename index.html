@@ -80,7 +80,8 @@
         .font-item.active { background: #111; border: 1px solid #0af2; }
 
         .font-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-        .font-name { font-size: 14px; font-weight: 500; }
+        .font-item .font-name { font-size: 14px; font-weight: 500; line-height: 1.3; }
+        .font-item .font-name:lang(th) { line-height: 1.5; }
 
         .license-badge {
             font-size: 9px;
@@ -203,8 +204,16 @@
             outline: none;
             transition: font-family 0.3s;
             resize: none;
-            min-height: 200px;
-            line-height: 1.2;
+            min-height: 150px;
+            line-height: 1.3;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+        
+        /* Thai font optimization */
+        #editable-preview:lang(th),
+        .font-item:has(.font-meta:contains('TH')) ~ #preview-stage #editable-preview {
+            line-height: 1.6;
         }
 
         #editable-preview::placeholder { color: #333; }
@@ -381,7 +390,14 @@
             preview.style.fontFamily = `'${font.cssName}', sans-serif`;
             preview.placeholder = `Type here to preview ${font.name}...`;
 
-            preview.value = font.language === 'th' ? '— ยินดีต้อนรับสู่ xJVKEx —' : '— Welcome to xJVKEx —';
+            // Set welcome text based on language with proper sizing
+            const welcomeText = font.language === 'th' 
+                ? 'ยินดีต้อนรับสู่ xJVKEx' 
+                : 'Welcome to xJVKEx';
+            preview.value = welcomeText;
+            
+            // Auto-resize textarea to fit content
+            autoResizeTextarea(preview);
 
             // Header info
             document.getElementById('current-font-name').textContent = font.name;
@@ -457,15 +473,38 @@
             document.getElementById('editable-preview').style.fontSize = val + 'px';
             document.getElementById('size-value').textContent = val + 'px';
         }
+        
+        // Auto-resize textarea to fit content
+        function autoResizeTextarea(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        }
+        
+        // Handle textarea input for auto-resize
+        document.getElementById('editable-preview').addEventListener('input', function() {
+            autoResizeTextarea(this);
+        });
 
         document.getElementById('search').oninput = (e) => filterFonts(e.target.value, currentFilter);
 
+        // Language tabs with visual feedback
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.onclick = () => {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                // Only allow one active tab per row
+                const row = tab.closest('.filter-row');
+                if (row) {
+                    row.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                }
                 tab.classList.add('active');
                 currentFilter = tab.dataset.filter;
                 filterFonts(document.getElementById('search').value, currentFilter);
+                
+                // Update welcome text if a font is already selected
+                if (activeFont && (currentFilter === 'th' || currentFilter === 'en')) {
+                    const preview = document.getElementById('editable-preview');
+                    preview.value = currentFilter === 'th' ? 'ยินดีต้อนรับสู่ xJVKEx' : 'Welcome to xJVKEx';
+                    autoResizeTextarea(preview);
+                }
             };
         });
 
