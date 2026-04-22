@@ -9,19 +9,23 @@
     "authorUrl": "https://www.1001fonts.com/users/zlx/",
     "sourceUrl": "https://www.1001fonts.com/dirty-enough-font.html",
     "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/en/dirty-enough/dirty-enough-regular.ttf",
-    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/en/dirty-enough/dirty-enough-regular.ttf"
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/en/dirty-enough/dirty-enough.zip",
+    "folderUrl": "https://github.com/xjvkex/wtf-ont/tree/main/fonts/en/dirty-enough",
+    "files": ["dirty-enough-regular.ttf", "credits.txt", "font.css"]
   },
   {
     "name": "RD Konmek",
     "cssName": "rd-konmek",
     "language": "th",
     "license": "personal",
-    "description": "A clean, modern Thai display font with a contemporary geometric feel. Personal use only — download from the author's site.",
+    "description": "A clean, modern Thai display font with contemporary geometric feel. Best suited for personal projects.",
     "author": "rdstudioax",
     "authorUrl": "https://www.f0nt.com/by/rdstudioax/",
     "sourceUrl": "https://www.f0nt.com/release/rdkonmek/",
     "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/rd-konmek/rd-konmek-regular.ttf",
-    "downloadUrl": null
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/rd-konmek/rd-konmek.zip",
+    "folderUrl": "https://github.com/xjvkex/wtf-ont/tree/main/fonts/th/rd-konmek",
+    "files": ["rd-konmek-regular.ttf", "credits.txt"]
   },
   {
     "name": "SOV Prisna",
@@ -33,7 +37,9 @@
     "authorUrl": "https://www.facebook.com/worawut.thanawatanawanich",
     "sourceUrl": "https://www.f0nt.com/release/sov-prisna/",
     "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/sov-prisna/sov-prisna-regular.ttf",
-    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/sov-prisna/sov-prisna-regular.ttf"
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/sov-prisna/sov-prisna.zip",
+    "folderUrl": "https://github.com/xjvkex/wtf-ont/tree/main/fonts/th/sov-prisna",
+    "files": ["sov-prisna-regular.ttf", "credits.txt", "font.css"]
   },
   {
     "name": "Torsilp Khitthueng Samoe",
@@ -45,6 +51,8 @@
     "authorUrl": "https://www.f0nt.com/by/rajun/",
     "sourceUrl": "https://www.f0nt.com/release/torsilp-khitthueng-samoe/",
     "previewUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/torsilp-khitthueng-samoe/torsilp-regular.ttf",
-    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/torsilp-khitthueng-samoe/torsilp-regular.ttf"
+    "downloadUrl": "https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/fonts/th/torsilp-khitthueng-samoe/torsilp-khitthueng-samoe.zip",
+    "folderUrl": "https://github.com/xjvkex/wtf-ont/tree/main/fonts/th/torsilp-khitthueng-samoe",
+    "files": ["torsilp-regular.ttf", "credits.txt", "font.css"]
   }
 ]

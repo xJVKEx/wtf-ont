@@ -1,0 +1,23 @@
+================================================================
+  Font Package — Distributed by xJVKEx
+  xjvkex.lol
+================================================================
+
+  Font Name : RD Konmek (รด กลมเอก)
+  Author    : rdstudioax
+  Source    : https://www.f0nt.com/release/rdkonmek/
+  Author    : https://www.f0nt.com/by/rdstudioax/
+  License   : Personal use only
+
+  Description: A clean, modern Thai display font with contemporary 
+  geometric feel. Best suited for personal projects.
+
+  This font has been repackaged for distribution by xJVKEx.
+  No modifications have been made to the original font files.
+  All rights remain with the original author.
+
+  To request removal of this font from our library:
+  Email   : jakezified@gmail.com
+  Subject : Font Removal Request — RD Konmek
+
+================================================================
