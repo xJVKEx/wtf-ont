@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xJVKEx Font Lab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0a; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        #wtf-app { display: flex; height: 100vh; background: #050505; border: 1px solid #222; overflow: hidden; }
+        
+        #sidebar { 
+            width: 320px; 
+            border-right: 1px solid #222; 
+            padding: 24px; 
+            overflow-y: auto;
+            background: #080808;
+        }
+        
+        #sidebar h2 { 
+            font-size: 14px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: #666; 
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        #search { 
+            width: 100%; 
+            background: #111; 
+            color: #fff; 
+            border: 1px solid #333; 
+            padding: 12px 16px; 
+            margin-bottom: 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        #search:focus { border-color: #0af; }
+        
+        #search::placeholder { color: #555; }
+        
+        .filter-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+        
+        .filter-tab { 
+            padding: 8px 16px; 
+            background: #111; 
+            border: 1px solid #333;
+            color: #888;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+        
+        .filter-tab:hover { background: #1a1a1a; color: #fff; }
+        .filter-tab.active { background: #0af; color: #000; border-color: #0af; }
+        
+        .font-item { 
+            padding: 14px 12px; 
+            cursor: pointer; 
+            border-bottom: 1px solid #111; 
+            transition: all 0.2s;
+            border-radius: 6px;
+            margin-bottom: 4px;
+        }
+        
+        .font-item:hover { 
+            background: #111; 
+            color: #0af;
+            transform: translateX(4px);
+        }
+        
+        .font-item .font-name { font-size: 14px; font-weight: 500; }
+        .font-item .font-meta { font-size: 11px; color: #555; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        #preview-stage { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 60px; 
+            text-align: center;
+            position: relative;
+        }
+        
+        #preview-stage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        
+        #editable-preview { 
+            font-size: 80px; 
+            width: 100%; 
+            max-width: 900px;
+            border: none; 
+            background: transparent; 
+            color: white; 
+            text-align: center; 
+            outline: none; 
+            transition: 0.3s;
+            resize: none;
+            min-height: 200px;
+            line-height: 1.2;
+        }
+        
+        #editable-preview::placeholder { color: #333; }
+        
+        .controls { 
+            margin-top: 60px; 
+            display: flex; 
+            gap: 20px; 
+            align-items: center;
+            background: #0a0a0a;
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 1px solid #222;
+        }
+        
+        .control-group { display: flex; flex-direction: column; gap: 8px; }
+        .control-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        
+        #size-slider { 
+            width: 150px;
+            accent-color: #0af;
+        }
+        
+        #size-value {
+            font-size: 14px;
+            color: #0af;
+            min-width: 50px;
+        }
+        
+        .btn { 
+            padding: 14px 28px; 
+            background: #fff; 
+            color: #000; 
+            text-decoration: none; 
+            border-radius: 6px; 
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn:hover { 
+            background: #0af; 
+            transform: translateY(-2px);
+        }
+        
+        .current-font-info {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            text-align: left;
+        }
+        
+        .current-font-info .label {
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        
+        .current-font-info .name {
+            font-size: 24px;
+            color: #0af;
+            font-weight: 600;
+        }
+        
+        .language-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-left: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wtf-app">
+        <div id="sidebar">
+            <h2>Font Library</h2>
+            <input type="text" id="search" placeholder="Filter fonts...">
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-filter="all">All</div>
+                <div class="filter-tab" data-filter="en">EN</div>
+                <div class="filter-tab" data-filter="th">TH</div>
+            </div>
+            <div id="font-list">Loading fonts...</div>
+        </div>
+        <div id="preview-stage">
+            <div class="current-font-info">
+                <div class="label">Currently Previewing</div>
+                <div class="name" id="current-font-name">-<span class="language-badge" id="current-lang">-</span></div>
+            </div>
+            <textarea id="editable-preview" spellcheck="false" placeholder="Type here to preview..."></textarea>
+            <div class="controls">
+                <div class="control-group">
+                    <span class="control-label">Font Size</span>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="size-slider" min="20" max="200" value="80" oninput="changeSize(this.value)">
+                        <span id="size-value">80px</span>
+                    </div>
+                </div>
+                <a id="download-btn" href="#" class="btn" target="_blank">Download Font</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const manifestUrl = 'https://cdn.jsdelivr.net/gh/xjvkex/wtf-ont/manifest.json';
+        let fonts = [];
+        let currentFilter = 'all';
+        let loadedFontStyles = new Set();
+
+        fetch(manifestUrl)
+            .then(r => r.json())
+            .then(data => {
+                fonts = data.map(f => {
+                    // Detect language from path
+                    f.language = f.downloadUrl.includes('/th/') ? 'th' : 'en';
+                    return f;
+                });
+                renderList(fonts);
+                if (fonts.length > 0) {
+                    applyFont(fonts[0]);
+                }
+            })
+            .catch(err => {
+                document.getElementById('font-list').innerHTML = '<div style="color: #f55; padding: 20px;">Failed to load fonts. Check your manifest URL.</div>';
+                console.error(err);
+            });
+
+        function renderList(list) {
+            const container = document.getElementById('font-list');
+            if (list.length === 0) {
+                container.innerHTML = '<div style="color: #666; padding: 20px; text-align: center;">No fonts found</div>';
+                return;
+            }
+            container.innerHTML = list.map(f => `
+                <div class="font-item" onclick='applyFont(${JSON.stringify(f).replace(/'/g, "&#39;")})'>
+                    <div class="font-name">${f.name}</div>
+                    <div class="font-meta">${f.language.toUpperCase()} • ${f.cssName}</div>
+                </div>
+            `).join('');
+        }
+
+        function applyFont(font) {
+            // Load font dynamically
+            if (!loadedFontStyles.has(font.cssName)) {
+                const style = document.createElement('style');
+                style.innerHTML = `@font-face { 
+                    font-family: '${font.cssName}'; 
+                    src: url('${font.downloadUrl}'); 
+                    font-display: swap;
+                }`;
+                document.head.appendChild(style);
+                loadedFontStyles.add(font.cssName);
+            }
+            
+            // Apply to preview
+            const preview = document.getElementById('editable-preview');
+            preview.style.fontFamily = font.cssName;
+            preview.placeholder = `Type here to preview ${font.name}...`;
+            
+            // Update UI
+            document.getElementById('current-font-name').innerHTML = `${font.name}<span class="language-badge">${font.language.toUpperCase()}</span>`;
+            document.getElementById('download-btn').href = font.downloadUrl;
+            
+            // Default sample text based on language
+            if (!preview.value) {
+                preview.value = font.language === 'th' ? 'กขฃคฅฆง' : 'The quick brown fox';
+            }
+        }
+
+        function changeSize(val) {
+            document.getElementById('editable-preview').style.fontSize = val + 'px';
+            document.getElementById('size-value').textContent = val + 'px';
+        }
+
+        // Search functionality
+        document.getElementById('search').oninput = (e) => {
+            filterFonts(e.target.value, currentFilter);
+        };
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.onclick = () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.filter;
+                filterFonts(document.getElementById('search').value, currentFilter);
+            };
+        });
+
+        function filterFonts(searchTerm, langFilter) {
+            let filtered = fonts.filter(f => {
+                const matchesSearch = f.name.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesLang = langFilter === 'all' || f.language === langFilter;
+                return matchesSearch && matchesLang;
+            });
+            renderList(filtered);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '+' || e.key === '=') {
+                const slider = document.getElementById('size-slider');
+                slider.value = Math.min(200, parseInt(slider.value) + 5);
+                changeSize(slider.value);
+            } else if (e.key === '-') {
+                const slider = document.getElementById('size-slider');
+                slider.value = Math.max(20, parseInt(slider.value) - 5);
+                changeSize(slider.value);
+            }
+        });
+    </script>
+</body>
+</html>
